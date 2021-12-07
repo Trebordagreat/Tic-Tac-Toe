@@ -1,1 +1,3 @@
 # Tic-Tac-Toe
+
+The purpose of this project is to construct a playable game of Tic-Tac-Toe on a Web Page.  By doing so, I will get a better understanding of factory functions, scope, the module pattern, and organizing my code.  This project is outlined in the Javascript course on The Odin Project.  I will also use this README as a spot to place pseudocode to help display my thought process throughout the project.  Now onto Step 2. 
