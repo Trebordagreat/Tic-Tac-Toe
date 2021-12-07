@@ -1,7 +1,20 @@
 const gameBoard = (() => {
-    const gameBoardArray = [];
+    const gameBoardArray = ['o','x','x','o','x','o', 'x', 'o', 'x'];
+
+    const markSymbol = () => {
+        document.querySelectorAll('td').forEach((cell, index) => {
+            cell.addEventListener('click', () => {
+                gameBoardArray[index] = "X";
+                createBoard();
+                console.log("test");
+            });
+        });    
+    }
 
     const createBoard = () => {
+        if (previousBoard = document.querySelector('table')) {
+            document.querySelector('.game').removeChild(previousBoard);
+        };
         let board = document.createElement('table')
         for (let i = 0; i < 3; i++) {
             let boardRow = document.createElement('tr')
@@ -24,25 +37,31 @@ const gameBoard = (() => {
                 else if (i === 1 && j === 1) {
                     boardCell.classList.add('TL-BR', 'BL-TR');
                 }
-                boardCell.textContent = "test";
-                gameBoardArray.push(boardCell);
+                boardCell.textContent = `${ gameBoardArray[i * 3 + j]}`;
                 boardRow.appendChild(boardCell);
             }
             board.appendChild(boardRow);
         }
         document.querySelector('.game').appendChild(board);
+        markSymbol();
     }
     return {
         createBoard,
-        gameBoardArray
+        gameBoardArray,
+        markSymbol
     };
 })();
 
 gameBoard.createBoard();
 
-const player = () => {
+
+
+const Player = (symbol) => {
     console.log("player");
 }
+
+const me = Player('X');
+const computer = Player('O');
 
 const displayController = (() => {
     console.log("display");
