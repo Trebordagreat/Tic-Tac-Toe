@@ -4,6 +4,7 @@ const setUpPage = (() => {
     const retrieveName = () => {
         let nameField = document.createElement('input');
         nameField.setAttribute('placeholder', 'Name');
+        nameField.setAttribute('value', 'You');
         nameField.classList.add('playerName');
         document.querySelector('.game').appendChild(nameField);
     }
@@ -20,7 +21,7 @@ const setUpPage = (() => {
 
 setUpPage.retrieveName()
 
-const Player = (symbol) => {
+const Player = (symbol, role) => {
     const winCheck = () => {
         const winConditions = ['row0', 'row1', 'row2', 'col0', 'col1', 'col2', 'TL-BR', 'BL-TR'];
         for (let i = 0; i < winConditions.length; i++) {
@@ -37,14 +38,20 @@ const Player = (symbol) => {
         }
     }
 
+    let playerName = "Computer";
+    if (role === 'player') {
+        playerName = document.querySelector('input').value
+    }
+
     return {
         symbol,
-        winCheck
+        winCheck,
+        playerName
     };
 }
 
-const xPlayer = Player('X');
-const oPlayer = Player('O');
+const xPlayer = Player('X', 'player');
+const oPlayer = Player('O', 'computer');
 
 const gameFlow = (() => {
     let gameTurn = 1;
@@ -72,7 +79,7 @@ const gameFlow = (() => {
         resultMessage.classList.add('results');
         
         if (currentPlayer().winCheck() === true) {
-            resultMessage.textContent = `${ currentPlayer().symbol } has won the match`;
+            resultMessage.textContent = `${ currentPlayer().playerName } won the match`;
         }
         else if (gameTurn === 9) {
             resultMessage.textContent = "The match was a tie";
@@ -91,13 +98,23 @@ const gameBoard = (() => {
     const gameBoardArray = ['','','','','','', '', '', ''];
 
     const markSymbol = () => {
+        
         document.querySelectorAll('td').forEach((cell, index) => {
 
             if (cell.classList.contains('openCell') && gameFlow.currentPlayer().winCheck() !== true) {
                 cell.addEventListener('click', function markCell () {
                     gameBoardArray[index] = gameFlow.currentPlayer().symbol;
                     createBoard();
-                    gameFlow.alternatePlayers();
+                    if (gameFlow.currentPlayer().winCheck() !== true) {
+                        gameFlow.alternatePlayers();
+                        setTimeout(function() {
+                            computerPicksRandom();
+                            createBoard();
+                        }, 1000);
+                    }
+                    else {
+                        gameFlow.alternatePlayers();
+                    }
                 });
             }
         });    
@@ -127,6 +144,7 @@ const gameBoard = (() => {
         if (previousVictory = document.querySelector('.results')) {
             page.removeChild(previousVictory);
         }
+
         let board = document.createElement('table')
         for (let i = 0; i < 3; i++) {
             let boardRow = document.createElement('tr')
@@ -163,9 +181,26 @@ const gameBoard = (() => {
         page.appendChild(resetButton);
         markSymbol();
     }
+
+    const computerPicksRandom = () => {
+        let possiblePicks = [];
+        for (let i = 0; i < gameBoardArray.length; i++) {
+            if (gameBoardArray[i] === "") {
+                possiblePicks.push(i);
+            }
+        }
+        console.log(possiblePicks);
+        const picked = possiblePicks[Math.floor(Math.random() * possiblePicks.length)];
+        console.log(picked);
+
+        gameBoardArray[picked] = gameFlow.currentPlayer().symbol;
+        gameFlow.alternatePlayers();
+    }
+
     return {
         createBoard,
-        gameBoardArray
+        gameBoardArray,
+        computerPicksRandom
     };
 })();
 
