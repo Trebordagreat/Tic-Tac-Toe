@@ -18,4 +18,10 @@ alternatePlayers function:
 1. Have a variable inside the gameFlow object that keeps track of the turn.
 2. Have two conditional branches that lead to either X or O player being represented in the turn.  The condition can be based on the modulo of the turn variable to see if it is even or odd.
 3. When player object returns the symbol, return the currentPlayer value chosen in step 2.  This can be used in the markBoard function in the gameBoard object.
-4. Increase the turn variable by one
+4. Increase the turn variable by one in alternatePlayers function and return it with gameFlow object so that it can be added in the markBoard event listener
+
+Setting win conditions:
+- set a winCheck function within the player object.  The adv. of doing that in player rather than in gameFlow is that I will not have to input the player into the function.
+- I have already added classList to the cells for any win conditions they may be involved in.  Create an array of these class that can be looped through to check for win conditions in each one.
+- Have the winCheck see whether any of the win conditions all have the same symbol
+- return true if the game has been won.  Return winCheck so that it can be used in the alternatePlayers function in the gameFlow object.
