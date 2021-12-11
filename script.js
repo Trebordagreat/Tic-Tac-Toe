@@ -1,13 +1,16 @@
 const gameBoard = (() => {
-    const gameBoardArray = ['o','x','x','o','x','o', 'x', 'o', 'x'];
+    const gameBoardArray = ['','','','','','', '', '', ''];
 
     const markSymbol = () => {
         document.querySelectorAll('td').forEach((cell, index) => {
-            cell.addEventListener('click', () => {
-                gameBoardArray[index] = "X";
-                createBoard();
-                console.log("test");
-            });
+            if (cell.classList.contains('openCell')) {
+                cell.addEventListener('click', () => {
+                    gameBoardArray[index] = gameFlow.currentPlayer();
+                    createBoard();
+                    gameFlow.alternatePlayers();
+                    console.log("test");
+                });
+            }
         });    
     }
 
@@ -37,6 +40,9 @@ const gameBoard = (() => {
                 else if (i === 1 && j === 1) {
                     boardCell.classList.add('TL-BR', 'BL-TR');
                 }
+                if (gameBoardArray[i * 3 + j] === "") {
+                    boardCell.classList.add('openCell');
+                }
                 boardCell.textContent = `${ gameBoardArray[i * 3 + j]}`;
                 boardRow.appendChild(boardCell);
             }
@@ -58,11 +64,30 @@ gameBoard.createBoard();
 
 const Player = (symbol) => {
     console.log("player");
+    return symbol;
 }
 
 const me = Player('X');
 const computer = Player('O');
 
-const displayController = (() => {
+const gameFlow = (() => {
+    let gameTurn = 1;
+
+    const currentPlayer = () => {
+        if (gameTurn % 2 === 1) {
+            return me;
+        }
+        else {
+            return computer;
+        }
+    }
+
+    const alternatePlayers = () => {
+        gameTurn++;
+    }
     console.log("display");
+    return {
+        currentPlayer,
+        alternatePlayers
+    }
 })();

@@ -8,3 +8,14 @@ The purpose of this project is to construct a playable game of Tic-Tac-Toe on a 
 - displayController is going to be a module object
 
 Important to add classes to each cell about different groups they can be in to win.  For example "row 1" "column 2" and if they all have the same textContent, then a win condition has been met.
+
+4. How to control the game flow of the board.
+- The turns need to alternate between the players.  That means each time the text content of one of the cells is marked, an event needs to happen that changes the current player which then means the next time a cell is clicked the other symbol will appear.
+- The flow of the game object will have a function controlling which player is currently playing.
+- There can also be a function in the flow of the game that keeps track of which cells have been chosen so that there can no be re marks.
+
+alternatePlayers function:
+1. Have a variable inside the gameFlow object that keeps track of the turn.
+2. Have two conditional branches that lead to either X or O player being represented in the turn.  The condition can be based on the modulo of the turn variable to see if it is even or odd.
+3. When player object returns the symbol, return the currentPlayer value chosen in step 2.  This can be used in the markBoard function in the gameBoard object.
+4. Increase the turn variable by one
