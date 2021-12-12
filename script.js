@@ -1,27 +1,6 @@
 
-const setUpPage = (() => {
-
-    const retrieveName = () => {
-        let nameField = document.createElement('input');
-        nameField.setAttribute('placeholder', 'Name');
-        nameField.setAttribute('value', 'You');
-        nameField.classList.add('playerName');
-        document.querySelector('.game').appendChild(nameField);
-    }
-
-    const generatePage = () => {
-        retrieveName();
-
-    }
-
-    return {
-        retrieveName
-    };
-})();
-
-setUpPage.retrieveName()
-
 const Player = (symbol, role) => {
+
     const winCheck = () => {
         const winConditions = ['row0', 'row1', 'row2', 'col0', 'col1', 'col2', 'TL-BR', 'BL-TR'];
         for (let i = 0; i < winConditions.length; i++) {
@@ -40,7 +19,7 @@ const Player = (symbol, role) => {
 
     let playerName = "Computer";
     if (role === 'player') {
-        playerName = document.querySelector('input').value
+        playerName = 'You';
     }
 
     return {
@@ -50,8 +29,8 @@ const Player = (symbol, role) => {
     };
 }
 
-const xPlayer = Player('X', 'player');
-const oPlayer = Player('O', 'computer');
+let xPlayer = Player('X', 'player');
+let oPlayer = Player('O', 'computer');
 
 const gameFlow = (() => {
     let gameTurn = 1;
@@ -70,16 +49,20 @@ const gameFlow = (() => {
     }
 
     const alternatePlayers = () => {
-        endGame(); 
+        console.log(currentPlayer());
+        endGame();
+        console.log(gameTurn);
         gameTurn++;
     }
 
     const endGame = () => {
         const resultMessage = document.createElement('div');
         resultMessage.classList.add('results');
+        console.log(currentPlayer().symbol);
         
         if (currentPlayer().winCheck() === true) {
             resultMessage.textContent = `${ currentPlayer().playerName } won the match`;
+            console.log("test");
         }
         else if (gameTurn === 9) {
             resultMessage.textContent = "The match was a tie";
@@ -109,8 +92,7 @@ const gameBoard = (() => {
                         gameFlow.alternatePlayers();
                         setTimeout(function() {
                             computerPicksRandom();
-                            createBoard();
-                        }, 1000);
+                        }, 700);
                     }
                     else {
                         gameFlow.alternatePlayers();
@@ -120,10 +102,7 @@ const gameBoard = (() => {
         });    
     }
 
-    const resetBoard = () => {
-        const resetButton = document.createElement('button');
-        resetButton.textContent = "Reset Game";
-        resetButton.classList.add('reset');
+    const resetBoard = (resetButton) => {
         resetButton.addEventListener('click', () => {
             for (let i = 0; i < gameBoardArray.length; i++) {
                 gameBoardArray[i] = "";
@@ -175,9 +154,12 @@ const gameBoard = (() => {
             }
             board.appendChild(boardRow);
         }
-        const resetButton = resetBoard();
+        const resetButton = document.createElement('button');
+        resetButton.textContent = "Reset Game";
+        resetButton.classList.add('reset');
+        resetBoard(resetButton);
 
-        page.appendChild(board);
+        page.appendChild(board); 
         page.appendChild(resetButton);
         markSymbol();
     }
@@ -189,19 +171,67 @@ const gameBoard = (() => {
                 possiblePicks.push(i);
             }
         }
-        console.log(possiblePicks);
+
         const picked = possiblePicks[Math.floor(Math.random() * possiblePicks.length)];
-        console.log(picked);
 
         gameBoardArray[picked] = gameFlow.currentPlayer().symbol;
+
+        createBoard();
         gameFlow.alternatePlayers();
     }
 
     return {
         createBoard,
         gameBoardArray,
-        computerPicksRandom
+        computerPicksRandom,
+        resetBoard
     };
 })();
 
+const setUpPage = (() => {
+
+    const retrieveName = () => {
+        let nameField = document.createElement('input');
+        nameField.setAttribute('placeholder', 'Name');
+        nameField.setAttribute('value', 'You');
+        nameField.classList.add('playerName');
+        document.querySelector('.game').appendChild(nameField);
+    }
+
+    const choosePlayerButtons = () => {
+        const chooseSymbolDiv = document.createElement('div');
+        const chooseXButton = document.createElement('button');
+        const chooseOButton = document.createElement('button');
+
+        chooseXButton.textContent = "X";
+        chooseOButton.textContent = "O";
+
+        gameBoard.resetBoard(chooseXButton);
+        gameBoard.resetBoard(chooseOButton);
+
+        chooseXButton.addEventListener('click', () => {
+            gameBoard.createBoard
+            xPlayer = Player('X', 'player');
+            oPlayer = Player('O', 'computer');
+        });
+        chooseOButton.addEventListener('click', () => {
+            xPlayer = Player('X', 'computer');
+            oPlayer = Player('O', 'player');
+            gameBoard.computerPicksRandom();
+            gameBoard.createBoard();
+        })
+
+        chooseSymbolDiv.appendChild(chooseXButton);
+        chooseSymbolDiv.appendChild(chooseOButton);
+        document.querySelector('.game').appendChild(chooseSymbolDiv);
+    }
+
+    return {
+        retrieveName,
+        choosePlayerButtons
+    };
+})();
+
+setUpPage.retrieveName()
+setUpPage.choosePlayerButtons();
 gameBoard.createBoard();
