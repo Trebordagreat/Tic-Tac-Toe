@@ -11,7 +11,15 @@ td {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    gap: 40px;
 }
+
+.symbolsDiv {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+}
+
 
 table {
     display: flex;
@@ -29,3 +37,16 @@ tr {
     gap: 2px;
 }
 
+button {
+    padding: 20px;
+    font-size: 40px;
+    background-color: plum;
+}
+
+.chooseText {
+    font-size: 30px;
+}
+
+.results {
+    font-size: 30px;
+}

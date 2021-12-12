@@ -200,6 +200,7 @@ const setUpPage = (() => {
 
     const choosePlayerButtons = () => {
         const chooseSymbolDiv = document.createElement('div');
+        chooseSymbolDiv.classList.add('symbolsDiv');
         const chooseXButton = document.createElement('button');
         const chooseOButton = document.createElement('button');
 
@@ -221,7 +222,12 @@ const setUpPage = (() => {
             gameBoard.createBoard();
         })
 
+        const chooseSymbolText = document.createElement('p');
+        chooseSymbolText.textContent = "Choose to Play as X or O";
+        chooseSymbolText.classList.add('chooseText');
+
         chooseSymbolDiv.appendChild(chooseXButton);
+        chooseSymbolDiv.appendChild(chooseSymbolText);
         chooseSymbolDiv.appendChild(chooseOButton);
         document.querySelector('.game').appendChild(chooseSymbolDiv);
     }
@@ -232,6 +238,5 @@ const setUpPage = (() => {
     };
 })();
 
-setUpPage.retrieveName()
 setUpPage.choosePlayerButtons();
 gameBoard.createBoard();
